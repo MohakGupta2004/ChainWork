@@ -1,6 +1,6 @@
-import './App.css'
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { useState } from 'react';
+import './App.css';
+import { RouterProvider, createBrowserRouter, Navigate, Outlet } from "react-router-dom";
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Wallet from "./pages/Wallet";
 import JobListings from "./pages/JobListings";
 import CreateProject from "./pages/CreateProject";
@@ -9,32 +9,94 @@ import MyBids from "./pages/MyBids";
 import MyJobs from "./pages/MyJobs";
 import MyProjects from "./pages/MyProjects";
 import Messages from "./pages/Messages";
+import Navbar from './components/Navbar';
 
-function App() {
-  const [state, setState] = useState({
-    web3: null,
-    contract: null,
-    account: null,
-  });
+// Layout component that includes Navbar
+const Layout = () => {
+  return (
+    <div>
+      <Navbar />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Outlet />
+      </main>
+    </div>
+  );
+};
 
-  // ✅ Type the function parameters properly
-  const saveState = ({ web3, contract, account }) => {
-    setState({ web3, contract, account });
-  };
+// Protected Route Component
+const ProtectedRoute = ({ allowedUserType }) => {
+  const { auth } = useAuth();
+  
+  if (!auth.account) {
+    return <Navigate to="/" replace />;
+  }
+  
+  if (allowedUserType && auth.userType !== allowedUserType) {
+    return <Navigate to="/" replace />;
+  }
 
-  // ✅ Type the router correctly
+  return <Layout />;
+};
+
+// Error component for 404 and other errors
+const ErrorPage = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen">
+    <h1 className="text-4xl font-bold mb-4">Oops!</h1>
+    <p className="text-xl mb-4">Sorry, page not found.</p>
+    <a href="/" className="text-blue-500 hover:text-blue-700">
+      Go back home
+    </a>
+  </div>
+);
+
+function AppRouter() {
   const router = createBrowserRouter([
-    { path: "/", element: <Wallet saveState={saveState} /> },
-    { path: "/jobs", element: <JobListings /> },
-    { path: "/create-project", element: <CreateProject /> },
-    { path: "/project/:id", element: <ProjectDetails /> },
-    { path: "/my-bids", element: <MyBids /> },
-    { path: "/my-jobs", element: <MyJobs /> },
-    { path: "/my-projects", element: <MyProjects /> },
-    { path: "/messages", element: <Messages /> },
+    {
+      path: "/",
+      element: <Wallet />,
+    },
+    {
+      path: "/client",
+      element: <ProtectedRoute allowedUserType="client" />,
+      children: [
+        { path: "create-project", element: <CreateProject /> },
+        { path: "my-projects", element: <MyProjects /> },
+        { path: "messages", element: <Messages /> },
+      ]
+    },
+    {
+      path: "/freelancer",
+      element: <ProtectedRoute allowedUserType="freelancer" />,
+      children: [
+        { path: "jobs", element: <JobListings /> },
+        { path: "my-bids", element: <MyBids /> },
+        { path: "my-jobs", element: <MyJobs /> },
+        { path: "messages", element: <Messages /> },
+      ]
+    },
+    {
+      path: "/project/:id",
+      element: <ProtectedRoute />,
+      children: [
+        { element: <ProjectDetails /> }
+      ]
+    },
+    {
+      path: "*",
+      element: <ErrorPage />
+    }
   ]);
 
   return <RouterProvider router={router} />;
 }
 
-export default App
+// Wrap the app with AuthProvider
+function App() {
+  return (
+    <AuthProvider>
+      <AppRouter />
+    </AuthProvider>
+  );
+}
+
+export default App;

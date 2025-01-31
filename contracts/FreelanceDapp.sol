@@ -48,7 +48,8 @@ contract FreelanceDapp {
 
     function createProject(
         string memory _title,
-        string memory _description
+        string memory _description,
+        uint _amount
     ) external payable {
         require(msg.value > 0, "Must deposit funds for the project");
         
@@ -57,7 +58,7 @@ contract FreelanceDapp {
             client: msg.sender,
             title: _title,
             description: _description,
-            budget: msg.value,
+            budget: _amount,
             completed: false,
             paid: false,
             acceptedFreelancer: address(0),
@@ -159,4 +160,15 @@ contract FreelanceDapp {
         Bid memory bid = projectBids[_projectId][_bidIndex];
         return (bid.freelancer, bid.amount, bid.accepted);
     }
+
+    function getAllProjects() external view returns (Project[] memory) {
+    Project[] memory allProjects = new Project[](projectCount);
+
+    for (uint256 i = 1; i <= projectCount; i++) {
+        allProjects[i - 1] = projects[i];
+    }
+
+    return allProjects;
+}
+
 }

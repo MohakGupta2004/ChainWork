@@ -1,4 +1,5 @@
-export default function JobListings() {
+import React from "react";
+export default function JobListings({state}) {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Job Listings</h1>

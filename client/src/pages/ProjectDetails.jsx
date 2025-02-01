@@ -19,9 +19,12 @@ export default function ProjectDetails() {
   const [bidAmount, setBidAmount] = useState('');
   const [bidComment, setBidComment] = useState('');
 
-  const handleDummyBid = () => {
+  const handlePlaceBid = () => {
     // Simulate placing a bid
-    alert(`Dummy bid of ${bidAmount} ETH placed with comment: "${bidComment}"`);
+    alert(`Bid of ${bidAmount} ETH placed with comment: "${bidComment}"`);
+    // Reset the input fields after placing the bid
+    setBidAmount('');
+    setBidComment('');
   };
 
   return (
@@ -52,23 +55,31 @@ export default function ProjectDetails() {
           )}
         </div>
 
-        <h2 className="text-xl font-bold mb-2 text-left">Place a Bid</h2>
-        <input
-          type="number"
-          step="0.01"
-          value={bidAmount}
-          onChange={(e) => setBidAmount(e.target.value)}
-          className="w-full p-2 border rounded mb-2"
-          placeholder="Enter your bid amount in ETH"
-        />
-        <textarea
-          value={bidComment}
-          onChange={(e) => setBidComment(e.target.value)}
-          className="w-full p-2 border rounded mb-2"
-          placeholder="Enter your bid comment"
-        />
+        <h2 className="text-xl font-bold mb-2 text-left">Actions</h2>
+        <div className="mb-4">
+          <label className="block text-gray-800 mb-2" htmlFor="bidAmount">Bid Amount (ETH)</label>
+          <input
+            type="number"
+            step="0.01"
+            id="bidAmount"
+            value={bidAmount}
+            onChange={(e) => setBidAmount(e.target.value)}
+            className="w-full p-2 border rounded mb-2"
+            placeholder="Enter your bid amount"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-800 mb-2" htmlFor="bidComment">Comment</label>
+          <textarea
+            id="bidComment"
+            value={bidComment}
+            onChange={(e) => setBidComment(e.target.value)}
+            className="w-full p-2 border rounded mb-2"
+            placeholder="Enter your comment"
+          />
+        </div>
         <button
-          onClick={handleDummyBid}
+          onClick={handlePlaceBid}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           Place Bid

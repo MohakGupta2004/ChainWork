@@ -17,6 +17,8 @@ contract FreelanceDapp {
         bool completed;
         address acceptedFreelancer;
         uint256 completionTimestamp;
+        bool approved;
+        uint256 approvalTimestamp;
     }
 
     mapping(uint256 => Project) public projects;
@@ -33,6 +35,8 @@ contract FreelanceDapp {
     event BidPlaced(uint256 projectId, address freelancer, uint256 amount);
     event BidAccepted(uint256 projectId, address freelancer);
     event ProjectCompleted(uint256 projectId);
+    event ProjectApproved(uint256 projectId);
+    event ProjectApprovalCanceled(uint256 projectId);
 
     modifier onlyClient(uint256 _projectId) {
         require(msg.sender == projects[_projectId].client, "Only client can perform this action");
@@ -59,7 +63,9 @@ contract FreelanceDapp {
             budget: _amount,
             completed: false,
             acceptedFreelancer: address(0),
-            completionTimestamp: 0
+            completionTimestamp: 0,
+            approved: false,
+            approvalTimestamp: 0
         });
 
         emit ProjectCreated(
@@ -195,5 +201,30 @@ contract FreelanceDapp {
         }
 
         return freelancerBids;
+    }
+
+    // New function to get all bids for a specific project ID
+    function getBidsByProjectId(uint256 _projectId) external view returns (Bid[] memory) {
+        require(_projectId <= projectCount, "Project does not exist");
+        return projectBids[_projectId];
+    }
+
+    function approveProject(uint256 _projectId) external onlyClient(_projectId) {
+        require(!projects[_projectId].approved, "Project already approved");
+        projects[_projectId].approved = true;
+        projects[_projectId].approvalTimestamp = block.timestamp;
+        emit ProjectApproved(_projectId);
+    }
+
+    function cancelApproval(uint256 _projectId) external onlyClient(_projectId) {
+        require(projects[_projectId].approved, "Project not approved");
+        require(block.timestamp <= projects[_projectId].approvalTimestamp + 60 minutes, "Approval period expired");
+        projects[_projectId].approved = false;
+        emit ProjectApprovalCanceled(_projectId);
+    }
+
+    function cancelProject(uint256 _projectId) external onlyAcceptedFreelancer(_projectId) {
+        require(!projects[_projectId].completed, "Project already completed");
+        projects[_projectId].completed = true;
     }
 }

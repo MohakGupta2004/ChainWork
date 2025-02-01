@@ -78,7 +78,7 @@ function AppRouter() {
       path: "/project/:id",
       element: <ProtectedRoute />,
       children: [
-        { element: <ProjectDetails /> }
+        { index: true, element: <ProjectDetails /> }
       ]
     },
     {

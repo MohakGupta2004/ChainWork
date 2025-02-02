@@ -26,6 +26,6 @@ router.get('/bids/project/:projectId', getBidsByProjectId) // Get bids by projec
 //@ts-ignore
 router.get('/bids/project/:projectId/all', getAllBidsForProject) // Get all bids for a specific project
 //@ts-ignore
-router.get('/projects/:id', getProjectDetails) // Get project details
+router.get('/projects/:_id', getProjectDetails) // Get project details
 
 export default router

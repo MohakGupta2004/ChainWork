@@ -1,20 +1,23 @@
+const hre = require("hardhat");
+
 async function main() {
-  const [deployer] = await ethers.getSigners();
+  // Get the contract factory
+  const FreelanceDapp = await hre.ethers.getContractFactory("FreelanceDapp");
 
-  console.log("Deploying contracts with the account:", deployer.address);
-
-  const FreelanceDapp = await ethers.getContractFactory("FreelanceDapp");
+  // Deploy the contract
   const freelanceDapp = await FreelanceDapp.deploy();
 
+  // Wait for the deployment to be mined
   await freelanceDapp.waitForDeployment();
 
-
-  console.log("FreelanceDapp deployed to:", await freelanceDapp.getAddress());
+  // Log the contract address
+  console.log("FreelanceDapp deployed to:",await freelanceDapp.getAddress());
 }
 
+// Run the deployment script
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error(error);
+    console.error("Deployment failed:", error);
     process.exit(1);
-  }); 
+  });

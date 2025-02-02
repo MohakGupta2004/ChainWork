@@ -1,72 +1,53 @@
-import React, { useState } from "react";
-import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import api from '../api'; // Import the Axios instance
 
 export default function JobListings() {
-  const { id } = useParams();
-  // Dummy data for projects
-  const projects = [
-    {
-      id: 1,
-      title: "Web Development Project",
-      description: "Build a responsive website using React and Node.js.",
-      budget: "1.5 ETH",
-      bids: [
-        { freelancer: "0x1234...abcd", amount: "0.5 ETH", accepted: false },
-        { freelancer: "0x5678...efgh", amount: "0.7 ETH", accepted: true },
-      ],
-    },
-    {
-      id: 2,
-      title: "Mobile App Development",
-      description: "Create a mobile application for iOS and Android.",
-      budget: "2.0 ETH",
-      bids: [],
-    },
-    {
-      id: 3,
-      title: "Blockchain Integration",
-      description: "Integrate blockchain technology into an existing application.",
-      budget: "3.0 ETH",
-      bids: [
-        { freelancer: "0xabcd...1234", amount: "1.0 ETH", accepted: false },
-      ],
-    },
-  ];
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [bidAmount, setBidAmount] = useState('');
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await api.get('/projects'); // Fetch all projects
+        setProjects(response.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleBid = (projectId) => {
-    // Logic to handle bidding (e.g., call the smart contract function)
-    alert(`Bid of ${bidAmount} ETH placed on project ID ${projectId}`);
-  };
+    fetchProjects();
+  }, []);
+
+  if (loading) return <p>Loading projects...</p>;
+  if (error) return <p>Error fetching projects: {error}</p>;
 
   return (
-    <div className="p-4">
+    <div className="p-4 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Job Listings</h1>
       <div className="grid gap-4">
-        {projects.map((project) => (
-          <div key={project.id} className="bg-gray-800 rounded-lg shadow p-4 border border-gray-600">
-            <Link to={`/project/${project.id}`} className="text-xl font-semibold text-white text-left">
-              {project.title}
-            </Link>
-            <p className="mb-2 text-white text-left">{project.description}</p>
-            <p className="font-bold mb-2 text-white text-left">
-              Budget: {project.budget} <span role="img" aria-label="Ethereum">🪙</span>
+        {projects.map((project, index) => (
+          <div key={index} className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg shadow p-4 border border-gray-600">
+            <h2 className="text-xl font-semibold text-white text-left">{project.title}</h2>
+            <p className="mb-2 text-white text-left"><strong>Description:</strong> {project.description}</p>
+            <p className="mb-2 text-white text-left"><strong>Budget:</strong> {parseFloat(project.budget) / 1e18} ETH</p>
+            <p className={`font-bold text-left ${project.approved ? "text-green-300" : "text-red-300"}`}>
+              {project.approved ? "Approved" : "Pending Approval"}
             </p>
-            <input
-              type="number"
-              step="0.01"
-              value={bidAmount}
-              onChange={(e) => setBidAmount(e.target.value)}
-              className="w-full p-2 border rounded mb-2"
-              placeholder="Enter your bid amount in ETH"
-            />
-            <button
-              onClick={() => handleBid(project.id)}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Place Bid
-            </button>
+            <div className="flex justify-between mt-4">
+              <Link to={`/projects/${index+1}`} className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200">
+                View Details
+              </Link>
+              <button
+                onClick={() => alert(`Bid placed on project: ${project.title}`)} // Placeholder for bid functionality
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              >
+                Bid
+              </button>
+            </div>
           </div>
         ))}
       </div>

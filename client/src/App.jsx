@@ -82,6 +82,14 @@ function AppRouter() {
       ]
     },
     {
+      path: "/projects",
+      element: <JobListings />,
+    },
+    {
+      path: "/projects/:id",
+      element: <ProjectDetails />,
+    },
+    {
       path: "*",
       element: <ErrorPage />
     }

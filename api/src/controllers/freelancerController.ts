@@ -1,6 +1,6 @@
 //@ts-ignore
 import { Request, Response } from 'express';
-import { contract } from '../config';
+import { contract } from "../../../config";
 
 // Define a type for the Bid
 interface Bid {
@@ -48,6 +48,7 @@ export const getAllBidsByFreelancer = async (req: Request, res: Response) => {
 // Get bids by project ID
 export const getBidsByProjectId = async (req: Request, res: Response) => {
   const projectId: number = parseInt(req.params.projectId);
+  console.log(projectId)
   if (isNaN(projectId)) {
     return res.status(400).json({ message: "Invalid project ID format" });
   }

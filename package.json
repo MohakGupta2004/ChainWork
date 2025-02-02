@@ -1,7 +1,7 @@
 {
   "name": "hardhat-project",
   "dependencies": {
-    "ethers": "^5.7.2",
+    "ethers": "^6.13.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",

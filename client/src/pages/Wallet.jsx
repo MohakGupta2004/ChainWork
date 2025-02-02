@@ -1,6 +1,6 @@
 import { Web3 } from "web3";
 import { useNavigate } from "react-router-dom";
-import ABI from "../../FreelanceDapp.json";
+import ABI from "../../../FreelanceDapp.json";
 import { useState, useEffect } from "react";
 import { useAuth } from '../context/AuthContext';
 
@@ -24,7 +24,7 @@ function Wallet() {
           method: "eth_requestAccounts"
         });
 
-        const contractAddress = "0x9c9907E9Baa9C2639362691093fb552f6E8c311C";
+        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
         const contract = new web3.eth.Contract(ABI, contractAddress);
 
         updateAuth({

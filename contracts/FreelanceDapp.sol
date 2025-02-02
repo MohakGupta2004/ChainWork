@@ -130,23 +130,8 @@ contract FreelanceDapp {
         return (bid.freelancer, bid.amount, bid.accepted);
     }
 
-    function getProject(uint256 _projectId) external view returns (
-        address client,
-        string memory title,
-        string memory description,
-        uint256 budget,
-        bool completed,
-        address acceptedFreelancer
-    ) {
-        Project memory project = projects[_projectId];
-        return (
-            project.client,
-            project.title,
-            project.description,
-            project.budget,
-            project.completed,
-            project.acceptedFreelancer
-        );
+    function getProject(uint256 _projectId) external view returns (Project memory) {
+        return projects[_projectId];
     }
 
     function getAllProjectsByClient(address _client) external view returns (Project[] memory) {

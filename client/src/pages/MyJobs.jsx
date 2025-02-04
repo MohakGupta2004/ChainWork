@@ -1,54 +1,80 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from '../api'; // Import the Axios instance
+import { useAuth } from '../context/AuthContext'; // Import the Auth context
+import { Link } from 'react-router-dom';
 
 export default function MyJobs() {
-  // Dummy data for jobs
-  const jobs = [
-    { jobId: 1, title: "Web Development Project", client: "0xClientAddress1", budget: "1.5 ETH", approved: false },
-    { jobId: 2, title: "Mobile App Development", client: "0xClientAddress2", budget: "2.0 ETH", approved: true },
-    { jobId: 3, title: "Blockchain Integration", client: "0xClientAddress3", budget: "3.0 ETH", approved: false },
-  ];
+  const { auth } = useAuth(); // Get the user's account
+  const [acceptedBids, setAcceptedBids] = useState([]); // State to hold accepted bids
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleApprove = (jobId) => {
-    // Logic to approve the job (to be implemented)
-    alert(`Job ${jobId} approved!`);
+  useEffect(() => {
+    const fetchAcceptedBids = async () => {
+      try {
+        const response = await api.get(`/bids/freelancer/${auth.account}`); // Fetch bids for the freelancer
+        const filteredBids = response.data.filter(bid => bid.accepted); // Filter only accepted bids
+        setAcceptedBids(filteredBids);
+        console.log(response.data)
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAcceptedBids(); // Fetch accepted bids when the component mounts
+  }, [auth.account]);
+
+  const handleMarkAsComplete = async (projectId) => {
+    try {
+      const tx = await auth.contract.methods.markProjectCompleted(projectId).send({ from: auth.account });
+      alert("Project marked as completed!");
+      console.log(tx);
+
+      // Refetch accepted bids to update the UI
+      const response = await api.get(`/bids/freelancer/${auth.account}`);
+      const filteredBids = response.data.filter(bid => bid.accepted); // Filter only accepted bids
+      setAcceptedBids(filteredBids);
+    } catch (error) {
+      console.error("Error marking project as completed:", error);
+      alert("Failed to mark project as completed. Please try again.");
+    }
   };
 
-  const handleCancelApproval = (jobId) => {
-    // Logic to cancel approval (to be implemented)
-    alert(`Approval for job ${jobId} canceled!`);
-  };
+  if (loading) return <p>Loading accepted bids...</p>;
+  if (error) return <p>Error fetching accepted bids: {error}</p>;
 
   return (
-    <div className="p-4 flex justify-start">
-      <div className="w-3/4">
-        <h1 className="text-2xl font-bold mb-4">My Jobs</h1>
-        <div className="grid gap-4">
-          {jobs.map((job, index) => (
-            <div key={index} className="bg-blue-100 rounded-lg shadow p-4 border border-blue-300">
-              <h2 className="text-xl font-semibold text-blue-800">{job.title}</h2>
-              <p className="mb-2 text-blue-600"><strong>Client:</strong> {job.client}</p>
-              <p className="mb-2 text-blue-600"><strong>Budget:</strong> {job.budget}</p>
-              <p className={`font-bold ${job.approved ? "text-green-500" : "text-red-500"}`}>
-                {job.approved ? "Approved" : "Pending Approval"}
-              </p>
-              {!job.approved ? (
-                <button
-                  onClick={() => handleApprove(job.jobId)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Approve Job
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Accepted Bids</h1>
+      <div className="grid gap-4">
+        {acceptedBids.length === 0 ? (
+          <p>No accepted bids found.</p>
+        ) : (
+          acceptedBids.map((bid, index) => (
+            <div key={index} className="bg-gray-800 rounded shadow p-4 mb-4">
+              <h2 className="text-xl font-semibold text-white">{bid.projectTitle}</h2>
+              <p className="mb-2 text-white"><strong>Bid Amount:</strong> {parseFloat(bid.amount) / 1e18} ETH</p>
+              <p className="mb-2 text-white"><strong>Comment:</strong> {bid.comment}</p>
+              <Link to={`/clients/projects/${index+1}`} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2">
+                View Project
+              </Link>
+              {bid.completed ? (
+                <button className="bg-gray-500 text-white px-4 py-2 rounded" disabled>
+                  Completed!
                 </button>
               ) : (
                 <button
-                  onClick={() => handleCancelApproval(job.jobId)}
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  onClick={() => handleMarkAsComplete(index+1)} // Pass the project ID
+                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                 >
-                  Cancel Approval
+                  Mark as Complete
                 </button>
               )}
             </div>
-          ))}
-        </div>
+          ))
+        )}
       </div>
     </div>
   );

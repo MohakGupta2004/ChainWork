@@ -1,6 +1,6 @@
 //@ts-ignore
 import { Request, Response } from 'express';
-import { contract } from "../../../config";
+import { contract } from "../../../config.ts";
 
 // Define a type for the Bid
 interface Bid {
@@ -8,6 +8,7 @@ interface Bid {
   amount: string; // Amount in wei (string to handle large numbers)
   accepted: boolean;
   comment: string;
+  completed: boolean;
 }
 
 // Define a type for the Project
@@ -24,18 +25,23 @@ interface Project {
 }
 
 // Get all bids by freelancer
+
 export const getAllBidsByFreelancer = async (req: Request, res: Response) => {
   const freelancerId: string = req.params.freelancerId; // Ensure freelancerId is a string
   try {
     const bids: Bid[] = await contract.methods.getAllBidsByFreelancer(freelancerId).call();
     console.log("Bids:", bids);
     
-    // Map through the bids if it's an array
-    const formattedBids = bids.map((bid: Bid) => ({
+    // Filter bids to include only accepted or completed ones
+    const filteredBids = bids.filter((bid: Bid) => bid.accepted || bid.completed);
+
+    // Map through the filtered bids
+    const formattedBids = filteredBids.map((bid: Bid) => ({
       freelancer: bid.freelancer,
       amount: bid.amount.toString(), // Convert BigInt to string
       accepted: bid.accepted,
-      comment: bid.comment
+      comment: bid.comment,
+      completed: bid.completed
     }));
 
     res.json(formattedBids);

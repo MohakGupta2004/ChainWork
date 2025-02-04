@@ -1,29 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import api from '../api'; // Import the Axios instance
+import { useAuth } from '../context/AuthContext'; // Import the Auth context
 
 export default function MyBids() {
-  // Dummy data for bids
-  const bids = [
-    { projectId: 1, projectTitle: "Web Development Project", amount: "0.5 ETH", comment: "I can do this!", accepted: false },
-    { projectId: 2, projectTitle: "Mobile App Development", amount: "0.7 ETH", comment: "Looking forward to this project!", accepted: true },
-    { projectId: 3, projectTitle: "Blockchain Integration", amount: "1.0 ETH", comment: "Excited to work on this!", accepted: false },
-  ];
+  const { auth } = useAuth(); // Get the user's account
+  const [bids, setBids] = useState([]); // State to hold bids
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBids = async () => {
+      try {
+        const response = await api.get(`/bids/freelancer/${auth.account}`); // Fetch bids for the freelancer
+        setBids(response.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBids(); // Fetch bids when the component mounts
+  }, [auth.account]);
+
+  if (loading) return <p>Loading bids...</p>;
+  if (error) return <p>Error fetching bids: {error}</p>;
 
   return (
-    <div className="p-4 flex justify-start">
-      <div className="w-3/4">
-        <h1 className="text-2xl font-bold mb-4">My Bids</h1>
-        <div className="grid gap-4">
-          {bids.map((bid, index) => (
-            <div key={index} className="bg-blue-100 rounded-lg shadow p-4 border border-blue-300"> {/* Card with bluish colors */}
-              <h2 className="text-xl font-semibold text-blue-800">{bid.projectTitle}</h2>
-              <p className="mb-2 text-blue-600"><strong>Bid Amount:</strong> {bid.amount}</p>
-              <p className="mb-2 text-blue-600"><strong>Comment:</strong> {bid.comment}</p>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">My Bids</h1>
+      <div className="grid gap-4">
+        {bids.length === 0 ? (
+          <p>No bids found.</p>
+        ) : (
+          bids.map((bid, index) => (
+            <div key={index} className="bg-gray-800 rounded shadow p-4 mb-4">
+              <h2 className="text-xl font-semibold text-white">{bid.freelancer}</h2>
+              <p className="mb-2 text-white"><strong>Amount:</strong> {parseFloat(bid.amount) / 1e18} ETH</p>
               <p className={`font-bold ${bid.accepted ? "text-green-500" : "text-red-500"}`}>
                 {bid.accepted ? "Accepted" : "Pending"}
               </p>
+              <p className="text-gray-400">Comment: {bid.comment}</p>
             </div>
-          ))}
-        </div>
+          ))
+        )}
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ contract FreelanceDapp {
         uint256 amount;
         bool accepted;
         string comment;
+        bool completed;
     }
 
     struct Project {
@@ -37,6 +38,7 @@ contract FreelanceDapp {
     event ProjectCompleted(uint256 projectId);
     event ProjectApproved(uint256 projectId);
     event ProjectApprovalCanceled(uint256 projectId);
+    event ProjectDeleted(uint256 projectId);
 
     modifier onlyClient(uint256 _projectId) {
         require(msg.sender == projects[_projectId].client, "Only client can perform this action");
@@ -77,6 +79,19 @@ contract FreelanceDapp {
         );
     }
 
+    function deleteProject(uint256 _projectId) public {
+        Project storage project = projects[_projectId];
+
+        // Ensure the caller is the project owner
+        require(msg.sender == project.client, "Only the project owner can delete this project");
+
+        // Delete the project
+        delete projects[_projectId];
+
+        // Emit an event
+        emit ProjectDeleted(_projectId);
+    } 
+
     function placeBid(uint256 _projectId, uint256 _amount, string memory _comment) external {
         require(_projectId <= projectCount, "Project does not exist");
         require(!projects[_projectId].completed, "Project already completed");
@@ -86,7 +101,8 @@ contract FreelanceDapp {
             freelancer: msg.sender,
             amount: _amount,
             accepted: false,
-            comment: _comment
+            comment: _comment,
+            completed: false
         }));
 
         emit BidPlaced(_projectId, msg.sender, _amount);
@@ -105,11 +121,25 @@ contract FreelanceDapp {
     }
 
     function markProjectCompleted(uint256 _projectId) external onlyAcceptedFreelancer(_projectId) {
-        require(!projects[_projectId].completed, "Project already completed");
-        projects[_projectId].completed = true;
-        projects[_projectId].completionTimestamp = block.timestamp;
-        emit ProjectCompleted(_projectId);
+    require(!projects[_projectId].completed, "Project already completed");
+
+    // Mark the project as completed
+    projects[_projectId].completed = true;
+    projects[_projectId].completionTimestamp = block.timestamp;
+
+    // Loop through the bids for the project and mark the accepted bid as completed
+    Bid[] storage bids = projectBids[_projectId];
+    for (uint256 i = 0; i < bids.length; i++) {
+        if (bids[i].accepted) {
+            bids[i].completed = true;
+            // If only one bid can be accepted per project, you can break early:
+            break;
+        }
     }
+
+    emit ProjectCompleted(_projectId);
+}
+
 
     function getAllProjects() external view returns (Project[] memory) {
         Project[] memory allProjects = new Project[](projectCount);
@@ -160,56 +190,39 @@ contract FreelanceDapp {
     }
 
     function getAllBidsByFreelancer(address _freelancer) external view returns (Bid[] memory) {
-        uint256 totalBids = 0;
+    uint256 totalBids = 0;
 
-        // Count total bids for the freelancer
-        for (uint256 i = 1; i <= projectCount; i++) {
-            for (uint256 j = 0; j < projectBids[i].length; j++) {
-                if (projectBids[i][j].freelancer == _freelancer) {
-                    totalBids++;
-                }
+    // Count total bids that are accepted or completed for the freelancer
+    for (uint256 i = 1; i <= projectCount; i++) {
+        for (uint256 j = 0; j < projectBids[i].length; j++) {
+            if (projectBids[i][j].freelancer == _freelancer && 
+                (projectBids[i][j].accepted || projectBids[i][j].completed)) {
+                totalBids++;
             }
         }
+    }
 
-        // Create an array to hold the bids
-        Bid[] memory freelancerBids = new Bid[](totalBids);
-        uint256 index = 0;
+    // Create an array to hold the bids
+    Bid[] memory freelancerBids = new Bid[](totalBids);
+    uint256 index = 0;
 
-        // Populate the array with bids for the freelancer
-        for (uint256 i = 1; i <= projectCount; i++) {
-            for (uint256 j = 0; j < projectBids[i].length; j++) {
-                if (projectBids[i][j].freelancer == _freelancer) {
-                    freelancerBids[index] = projectBids[i][j];
-                    index++;
-                }
+    // Populate the array with accepted or completed bids for the freelancer
+    for (uint256 i = 1; i <= projectCount; i++) {
+        for (uint256 j = 0; j < projectBids[i].length; j++) {
+            if (projectBids[i][j].freelancer == _freelancer && 
+                (projectBids[i][j].accepted || projectBids[i][j].completed)) {
+                freelancerBids[index] = projectBids[i][j];
+                index++;
             }
         }
+    }
 
-        return freelancerBids;
+    return freelancerBids;
     }
 
     // New function to get all bids for a specific project ID
     function getBidsByProjectId(uint256 _projectId) external view returns (Bid[] memory) {
         require(_projectId <= projectCount, "Project does not exist");
         return projectBids[_projectId];
-    }
-
-    function approveProject(uint256 _projectId) external onlyClient(_projectId) {
-        require(!projects[_projectId].approved, "Project already approved");
-        projects[_projectId].approved = true;
-        projects[_projectId].approvalTimestamp = block.timestamp;
-        emit ProjectApproved(_projectId);
-    }
-
-    function cancelApproval(uint256 _projectId) external onlyClient(_projectId) {
-        require(projects[_projectId].approved, "Project not approved");
-        require(block.timestamp <= projects[_projectId].approvalTimestamp + 60 minutes, "Approval period expired");
-        projects[_projectId].approved = false;
-        emit ProjectApprovalCanceled(_projectId);
-    }
-
-    function cancelProject(uint256 _projectId) external onlyAcceptedFreelancer(_projectId) {
-        require(!projects[_projectId].completed, "Project already completed");
-        projects[_projectId].completed = true;
     }
 }

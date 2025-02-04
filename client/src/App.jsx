@@ -10,6 +10,7 @@ import MyJobs from "./pages/MyJobs";
 import MyProjects from "./pages/MyProjects";
 import Messages from "./pages/Messages";
 import Navbar from './components/Navbar';
+import ClientProjectDetails from './pages/ClientProjectDetails';
 
 // Layout component that includes Navbar
 const Layout = () => {
@@ -86,8 +87,12 @@ function AppRouter() {
       element: <JobListings />,
     },
     {
-      path: "/projects/:id",
-      element: <ProjectDetails />,
+      path: "/clients/projects/:id",
+      element: <ClientProjectDetails />,
+    },
+    {
+      path: "/my-bids",
+      element: <MyBids />,
     },
     {
       path: "*",
@@ -98,12 +103,12 @@ function AppRouter() {
   return <RouterProvider router={router} />;
 }
 
-// Wrap the app with AuthProvider
+// Wrap the app with AuthProvider and ProjectProvider
 function App() {
   return (
-    <AuthProvider>
-      <AppRouter />
-    </AuthProvider>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
   );
 }
 

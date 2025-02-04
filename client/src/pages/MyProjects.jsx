@@ -1,42 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from '../api'; // Import the Axios instance
+import { useAuth } from '../context/AuthContext'; // Import the Auth context
+import { Link } from 'react-router-dom';
 
 export default function MyProjects() {
-  // Dummy data for projects
-  const projects = [
-    { projectId: 1, title: "Web Development Project", client: "0xClientAddress1", budget: "1.5 ETH", approved: false },
-    { projectId: 2, title: "Mobile App Development", client: "0xClientAddress2", budget: "2.0 ETH", approved: true },
-    { projectId: 3, title: "Blockchain Integration", client: "0xClientAddress3", budget: "3.0 ETH", approved: false },
-  ];
+  const { auth } = useAuth(); // Get the user's account
+  const [projects, setProjects] = useState([]); // State to hold projects
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleApprove = (projectId) => {
-    // Logic to approve the project (to be implemented)
-    alert(`Project ${projectId} approved!`);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await api.get(`/projects/client/${auth.account}`); // Fetch projects for the client
+        setProjects(response.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects(); // Fetch projects when the component mounts
+  }, [auth.account]);
+
+  if (loading) return <p>Loading projects...</p>;
+  if (error) return <p>Error fetching projects: {error}</p>;
+
+  const handlePay = async (projectId) => {
+    // Implement payment logic here
+    alert(`Payment functionality for project ID ${projectId} to be implemented.`);
   };
 
   return (
-    <div className="p-4 flex justify-start">
-      <div className="w-3/4">
-        <h1 className="text-2xl font-bold mb-4">My Projects</h1>
-        <div className="grid gap-4">
-          {projects.map((project, index) => (
-            <div key={index} className="bg-blue-100 rounded-lg shadow p-4 border border-blue-300">
-              <h2 className="text-xl font-semibold text-blue-800">{project.title}</h2>
-              <p className="mb-2 text-blue-600"><strong>Client:</strong> {project.client}</p>
-              <p className="mb-2 text-blue-600"><strong>Budget:</strong> {project.budget}</p>
-              <p className={`font-bold ${project.approved ? "text-green-500" : "text-red-500"}`}>
-                {project.approved ? "Approved" : "Pending Approval"}
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">My Projects</h1>
+      <div className="grid gap-4">
+        {projects.length === 0 ? (
+          <p>No projects found.</p>
+        ) : (
+          projects.map((project, index) => (
+            <div key={index} className="bg-gray-800 rounded shadow p-4 mb-4">
+              <h2 className="text-xl font-semibold text-white">{project.title}</h2>
+              <p className="mb-2 text-white"><strong>Description:</strong> {project.description}</p>
+              <p className="mb-2 text-white"><strong>Budget:</strong> {parseFloat(project.budget) / 1e18} ETH</p>
+              <p className={`font-bold ${project.completed ? "text-green-500" : "text-red-500"}`}>
+                {project.completed ? "Completed" : "In Progress"}
               </p>
-              {!project.approved && (
+              {project.completed && (
                 <button
-                  onClick={() => handleApprove(project.projectId)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  onClick={() => handlePay(project.id)} // Pass the project ID
+                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mt-2"
                 >
-                  Approve Project
+                  Pay
                 </button>
               )}
+              <Link to={`/clients/projects/${index+1}`} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">
+                View Project
+              </Link>
             </div>
-          ))}
-        </div>
+          ))
+        )}
       </div>
     </div>
   );

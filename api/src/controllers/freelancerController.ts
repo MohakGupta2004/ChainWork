@@ -1,6 +1,6 @@
 //@ts-ignore
 import { Request, Response } from 'express';
-import { contract } from "../../../config.ts";
+import { contract } from "../../config";
 
 // Define a type for the Bid
 interface Bid {

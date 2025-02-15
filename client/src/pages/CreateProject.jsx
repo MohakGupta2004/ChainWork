@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext'; // Import the Auth context
-import { web3 } from '../../../config'; // Import the web3 instance
+import { web3 } from '../../config'; // Import the web3 instance
 
 export default function CreateProject() {
   const [title, setTitle] = useState('');

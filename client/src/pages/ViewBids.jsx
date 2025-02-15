@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useWeb3 } from '../context/Web3Context'; // Import your Web3 context
 
 export default function ViewBids() {
   const [projectId, setProjectId] = useState('');

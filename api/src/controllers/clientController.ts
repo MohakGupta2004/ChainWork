@@ -1,6 +1,6 @@
 //@ts-ignore
 import { Request, Response } from 'express';
-import { contract } from '../../../config';
+import { contract } from '../../config';
 
 // Get all projects by client
 export const getAllProjectsByClient = async (req: Request, res: Response) => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api'; // Import the Axios instance
 import { useAuth } from '../context/AuthContext'; // Import the Auth context
-import { web3 } from '../../../config'; // Import the web3 instance
+import { web3 } from '../../config'; // Import the web3 instance
 
 export default function ProjectDetails() {
   const { id } = useParams(); // Use id to match the route parameter

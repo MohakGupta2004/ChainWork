@@ -10,17 +10,19 @@ The Freelance DApp is a decentralized application built on the Ethereum blockcha
 - **Create Projects**: Clients can create new projects by providing a title, description, and budget.
 - **View Bids**: Clients can view bids from freelancers for their projects.
 - **Manage Projects**: Clients can mark projects as completed and make payments to freelancers.
+- **Chat with freelancers**: Clients can chat with Freelancers.
 
 ### Freelancer Features
 - **Browse Jobs**: Freelancers can browse available jobs and view project details.
 - **Place Bids**: Freelancers can place bids on projects they are interested in.
 - **Manage Bids**: Freelancers can view their accepted bids and the status of their projects.
+- **Chat with clients**: Freelancers can chat with clients.
 
 ## Technologies Used
 
 - **Smart Contracts**: Solidity
 - **Frontend**: React.js
-- **Backend**: Node.js with Express
+- **Backend**: Bun.js with Express && Socket.io 
 - **Blockchain**: Ethereum
 - **Web3 Integration**: Ethers.js and Web3.js
 
@@ -28,7 +30,7 @@ The Freelance DApp is a decentralized application built on the Ethereum blockcha
 
 ### Prerequisites
 
-- Node.js (v14 or later)
+- Bun 
 - npm (Node Package Manager)
 - Hardhat (for smart contract development)
 - MetaMask (for interacting with the Ethereum blockchain)
@@ -37,7 +39,7 @@ The Freelance DApp is a decentralized application built on the Ethereum blockcha
 
 ```bash
 git clone https://github.com/MohakGupta2004/Work3.git
-cd freelance-dapp
+cd Work3 
 ```
 
 ### Install Dependencies
@@ -67,15 +69,17 @@ npx hardhat node
 1. **Start the Backend Server**:
 
 ```bash
+npm i
 cd api
-npm start
+npm run dev 
 ```
 
 2. **Start the Frontend Application**:
 
 ```bash
+npm i
 cd client
-npm start
+npm run dev 
 ```
 
 3. Open your browser and navigate to `http://localhost:3000` to access the application.
@@ -97,17 +101,20 @@ npm start
 ```
 /contracts
     ├── FreelanceDapp.sol          # Smart contract for managing projects and bids
+    ├── PaymentDapp.sol 
 /client
     ├── /pages                      # React components for different pages
     │   ├── MyJobs.jsx              # Page for freelancers to manage their jobs
     │   ├── MyBids.jsx              # Page for freelancers to view their bids
     │   ├── CreateProject.jsx        # Page for clients to create new projects
+    │   ├── Messages.jsx  
     │   ├── JobListings.jsx          # Page for freelancers to browse jobs
     │   ├── ClientProjectDetails.jsx  # Page for clients to view project details
     │   ├── Wallet.jsx               # Page for managing wallet connections
     │   ├── App.jsx                  # Main application component
     ├── /context                     # Context for managing authentication
     │   ├── AuthContext.jsx
+        ├── SocketContext.jsx 
 /api
     ├── index.ts                    # Main entry point for the API
     ├── /controllers                 # Controllers for handling API requests

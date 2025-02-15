@@ -101,13 +101,13 @@ npm run dev
 ```
 /contracts
     ├── FreelanceDapp.sol          # Smart contract for managing projects and bids
-    ├── PaymentDapp.sol 
+    ├── PaymentContract.sol        # For handling Payments
 /client
     ├── /pages                      # React components for different pages
     │   ├── MyJobs.jsx              # Page for freelancers to manage their jobs
     │   ├── MyBids.jsx              # Page for freelancers to view their bids
     │   ├── CreateProject.jsx        # Page for clients to create new projects
-    │   ├── Messages.jsx  
+    │   ├── Messages.jsx             # Handling Messages 
     │   ├── JobListings.jsx          # Page for freelancers to browse jobs
     │   ├── ClientProjectDetails.jsx  # Page for clients to view project details
     │   ├── Wallet.jsx               # Page for managing wallet connections

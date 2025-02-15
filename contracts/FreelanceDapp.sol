@@ -5,9 +5,10 @@ contract FreelanceDapp {
     struct Bid {
         address freelancer;
         uint256 amount;
-        bool accepted;
         string comment;
+        bool accepted;
         bool completed;
+        address client;
     }
 
     struct Project {
@@ -100,9 +101,10 @@ contract FreelanceDapp {
         projectBids[_projectId].push(Bid({
             freelancer: msg.sender,
             amount: _amount,
-            accepted: false,
             comment: _comment,
-            completed: false
+            accepted: false,
+            completed: false,
+            client: projects[_projectId].client
         }));
 
         emit BidPlaced(_projectId, msg.sender, _amount);
@@ -190,34 +192,26 @@ contract FreelanceDapp {
     }
 
     function getAllBidsByFreelancer(address _freelancer) external view returns (Bid[] memory) {
-    uint256 totalBids = 0;
-
-    // Count total bids that are accepted or completed for the freelancer
-    for (uint256 i = 1; i <= projectCount; i++) {
-        for (uint256 j = 0; j < projectBids[i].length; j++) {
-            if (projectBids[i][j].freelancer == _freelancer && 
-                (projectBids[i][j].accepted || projectBids[i][j].completed)) {
-                totalBids++;
+        uint256 totalBids = 0;
+        for (uint256 i = 1; i <= projectCount; i++) {
+            for (uint256 j = 0; j < projectBids[i].length; j++) {
+                if (projectBids[i][j].freelancer == _freelancer) {
+                    totalBids++;
+                }
             }
         }
-    }
 
-    // Create an array to hold the bids
-    Bid[] memory freelancerBids = new Bid[](totalBids);
-    uint256 index = 0;
-
-    // Populate the array with accepted or completed bids for the freelancer
-    for (uint256 i = 1; i <= projectCount; i++) {
-        for (uint256 j = 0; j < projectBids[i].length; j++) {
-            if (projectBids[i][j].freelancer == _freelancer && 
-                (projectBids[i][j].accepted || projectBids[i][j].completed)) {
-                freelancerBids[index] = projectBids[i][j];
-                index++;
+        Bid[] memory freelancerBids = new Bid[](totalBids);
+        uint256 index = 0;
+        for (uint256 i = 1; i <= projectCount; i++) {
+            for (uint256 j = 0; j < projectBids[i].length; j++) {
+                if (projectBids[i][j].freelancer == _freelancer) {
+                    freelancerBids[index] = projectBids[i][j];
+                    index++;
+                }
             }
         }
-    }
-
-    return freelancerBids;
+        return freelancerBids;
     }
 
     // New function to get all bids for a specific project ID

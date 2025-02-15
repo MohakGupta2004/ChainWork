@@ -9,6 +9,7 @@ import {
   getProjectDetails,
   getAllBidsForProject
 } from '../controllers/freelancerController'
+import messageRoutes from './messageRoutes'
 
 const router = Router()
 
@@ -27,5 +28,7 @@ router.get('/bids/project/:projectId', getBidsByProjectId) // Get bids by projec
 router.get('/bids/project/:projectId/all', getAllBidsForProject) // Get all bids for a specific project
 //@ts-ignore
 router.get('/projects/:_id', getProjectDetails) // Get project details
+
+router.use('/messages', messageRoutes)
 
 export default router

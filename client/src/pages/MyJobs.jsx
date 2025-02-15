@@ -60,6 +60,12 @@ export default function MyJobs() {
               <Link to={`/clients/projects/${index+1}`} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2">
                 View Project
               </Link>
+              <Link 
+                to={`/freelancer/messages?address=${bid.client}`} 
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2"
+              >
+                Chat with Client
+              </Link>
               {bid.completed ? (
                 <button className="bg-gray-500 text-white px-4 py-2 rounded" disabled>
                   Completed!

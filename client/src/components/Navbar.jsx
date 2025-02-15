@@ -11,14 +11,14 @@ function Navbar() {
   const clientLinks = [
     { to: '/client/create-project', text: 'Create Project' },
     { to: '/client/my-projects', text: 'My Projects' },
-    { to: '/client/messages', text: 'Messages' },
+    { to: '/client/messages', text: 'Messages' }
   ];
 
   const freelancerLinks = [
     { to: '/freelancer/jobs', text: 'Find Jobs' },
     { to: '/freelancer/my-bids', text: 'My Bids' },
     { to: '/freelancer/my-jobs', text: 'My Jobs' },
-    { to: '/freelancer/messages', text: 'Messages' },
+    { to: '/freelancer/messages', text: 'Messages' }
   ];
 
   const currentLinks = auth.userType === 'client' ? clientLinks : 

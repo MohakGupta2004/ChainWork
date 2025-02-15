@@ -11,16 +11,19 @@ export default function MyBids() {
   useEffect(() => {
     const fetchBids = async () => {
       try {
-        const response = await api.get(`/bids/freelancer/${auth.account}`); // Fetch bids for the freelancer
+        console.log("Fetching bids for account:", auth.account);
+        const response = await api.get(`/bids/freelancer/${auth.account}`);
+        console.log("Response data:", response.data);
         setBids(response.data);
       } catch (err) {
+        console.error("Error details:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBids(); // Fetch bids when the component mounts
+    fetchBids();
   }, [auth.account]);
 
   if (loading) return <p>Loading bids...</p>;
@@ -35,7 +38,7 @@ export default function MyBids() {
         ) : (
           bids.map((bid, index) => (
             <div key={index} className="bg-gray-800 rounded shadow p-4 mb-4">
-              <h2 className="text-xl font-semibold text-white">{bid.freelancer}</h2>
+              <h2 className="text-xl font-semibold text-white">{bid.client}</h2>
               <p className="mb-2 text-white"><strong>Amount:</strong> {parseFloat(bid.amount) / 1e18} ETH</p>
               <p className={`font-bold ${bid.accepted ? "text-green-500" : "text-red-500"}`}>
                 {bid.accepted ? "Accepted" : "Pending"}

@@ -11,6 +11,7 @@ import MyProjects from "./pages/MyProjects";
 import Messages from "./pages/Messages";
 import Navbar from './components/Navbar';
 import ClientProjectDetails from './pages/ClientProjectDetails';
+import { SocketProvider } from './context/SocketContext';
 
 // Layout component that includes Navbar
 const Layout = () => {
@@ -25,7 +26,7 @@ const Layout = () => {
 };
 
 // Protected Route Component
-const ProtectedRoute = ({ allowedUserType }) => {
+const ProtectedRouteComponent = ({ allowedUserType }) => {
   const { auth } = useAuth();
   
   if (!auth.account) {
@@ -58,7 +59,7 @@ function AppRouter() {
     },
     {
       path: "/client",
-      element: <ProtectedRoute allowedUserType="client" />,
+      element: <ProtectedRouteComponent allowedUserType="client" />,
       children: [
         { path: "create-project", element: <CreateProject /> },
         { path: "my-projects", element: <MyProjects /> },
@@ -67,7 +68,7 @@ function AppRouter() {
     },
     {
       path: "/freelancer",
-      element: <ProtectedRoute allowedUserType="freelancer" />,
+      element: <ProtectedRouteComponent allowedUserType="freelancer" />,
       children: [
         { path: "jobs", element: <JobListings /> },
         { path: "my-bids", element: <MyBids /> },
@@ -77,7 +78,7 @@ function AppRouter() {
     },
     {
       path: "/project/:id",
-      element: <ProtectedRoute />,
+      element: <ProtectedRouteComponent />,
       children: [
         { index: true, element: <ProjectDetails /> }
       ]
@@ -103,12 +104,13 @@ function AppRouter() {
   return <RouterProvider router={router} />;
 }
 
-// Wrap the app with AuthProvider and ProjectProvider
 function App() {
   return (
-      <AuthProvider>
+    <AuthProvider>
+      <SocketProvider>
         <AppRouter />
-      </AuthProvider>
+      </SocketProvider>
+    </AuthProvider>
   );
 }
 

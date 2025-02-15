@@ -9,6 +9,7 @@ interface Bid {
   accepted: boolean;
   comment: string;
   completed: boolean;
+  client: string;
 }
 
 // Define a type for the Project
@@ -27,26 +28,25 @@ interface Project {
 // Get all bids by freelancer
 
 export const getAllBidsByFreelancer = async (req: Request, res: Response) => {
-  const freelancerId: string = req.params.freelancerId; // Ensure freelancerId is a string
+  const freelancerId: string = req.params.freelancerId;
   try {
+    console.log("Fetching bids for freelancer:", freelancerId);
     const bids: Bid[] = await contract.methods.getAllBidsByFreelancer(freelancerId).call();
-    console.log("Bids:", bids);
+    console.log("Raw bids from contract:", bids);
     
-    // Filter bids to include only accepted or completed ones
-    const filteredBids = bids.filter((bid: Bid) => bid.accepted || bid.completed);
-
-    // Map through the filtered bids
-    const formattedBids = filteredBids.map((bid: Bid) => ({
+    const formattedBids = bids.map((bid: Bid) => ({
       freelancer: bid.freelancer,
-      amount: bid.amount.toString(), // Convert BigInt to string
+      amount: bid.amount.toString(),
       accepted: bid.accepted,
       comment: bid.comment,
-      completed: bid.completed
+      completed: bid.completed,
+      client: bid.client
     }));
-
+    
+    console.log("Formatted bids:", formattedBids);
     res.json(formattedBids);
   } catch (error: any) {
-    console.log("Error fetching bids:", error);
+    console.error("Error in getAllBidsByFreelancer:", error);
     res.status(500).json({ message: "Error fetching bids", error: error.message });
   }
 };

@@ -13,8 +13,7 @@ import Navbar from './components/Navbar';
 import ClientProjectDetails from './pages/ClientProjectDetails';
 import { SocketProvider } from './context/SocketContext';
 import { Footer } from './components/Footer';
-import LandingPage from './pages/LandingPage'
-import DepositFund from './pages/DepositFund';
+import LandingPage from './pages/LandingPage';
 // Layout component that includes Navbar
 const Layout = () => {
   return (
@@ -101,10 +100,6 @@ function AppRouter() {
     {
       path: "/my-bids",
       element: <MyBids />,
-    },
-    {
-      path: "/deposit-fund",
-      element: <DepositFund/>
     },
     {
       path: "*",

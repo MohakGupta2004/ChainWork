@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api'; // Import the Axios instance
+import Loader from '../components/Loader';
 
 export default function JobListings() {
   const [projects, setProjects] = useState([]);
@@ -32,7 +33,7 @@ export default function JobListings() {
   if (loading) {
     return (
       <div className="bg-black min-h-screen flex items-center justify-center">
-        <p className="text-white text-xl">Loading projects...</p>
+        <Loader />
       </div>
     );
   }

@@ -3,9 +3,10 @@ import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 import { Zap } from 'lucide-react';
 import ProfileModal from './ProfileModal';
-
-
+import {AvatarGenerator} from 'random-avatar-generator'
 function Navbar() {
+  const generator = new AvatarGenerator()
+  const avatar = generator.generateRandomAvatar('avatar')
   const { auth } = useAuth();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,7 +82,7 @@ function Navbar() {
               )}
               <div className="w-10 h-10 bg-[var(--bg-color)] text-[var()] rounded-full flex items-center justify-center
                             font-bold text-sm hover:bg-[var(--bg-deep-color)] transition-colors cursor-pointer">
-                W3
+               <img src={avatar} className='object-content'/> 
               </div>
             </div>
           </div>

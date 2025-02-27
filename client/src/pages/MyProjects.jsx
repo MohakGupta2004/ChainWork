@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'; // Import the Auth context
 import { Link } from 'react-router-dom';
 import Web3 from "web3"; // Import Web3 for Ethereum interaction
 import PaymentABI from '../../../PaymentABI.json'; // Import the contract ABI
+import Loader from "../components/Loader";
 
 export default function MyProjects() {
   const { auth } = useAuth(); // Get the user's account
@@ -51,7 +52,12 @@ export default function MyProjects() {
   };
   
 
-  if (loading) return <p>Loading projects...</p>;
+  if (loading) {
+    return (
+    <div className="bg-black min-h-screen flex items-center justify-center">
+      <Loader />
+    </div>
+  )};
   if (error) return <p>Error fetching projects: {error}</p>;
 
   return (

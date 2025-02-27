@@ -58,12 +58,12 @@ function AppRouter() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Wallet />,
+      element: <LandingPage />,
     },
-    {
-      path: "/land",
-      element: <LandingPage/>,
-    },
+    // {
+    //   path: "/land",
+    //   element: <LandingPage/>,
+    // },
     {
       path: "/client",
       element: <ProtectedRouteComponent allowedUserType="client" />,

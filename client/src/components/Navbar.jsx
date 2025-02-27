@@ -1,7 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
+import { Zap } from 'lucide-react';
 import ProfileModal from './ProfileModal';
+
 
 function Navbar() {
   const { auth } = useAuth();
@@ -33,18 +35,22 @@ function Navbar() {
 
   return (
     <>
-      <nav className="bg-black text-white">
+      <nav className="border-b border-[var(--border-color)]">
         <div className="w-full">
           <div className="flex justify-between h-16 items-center px-4">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
               <Link 
                 to="/" 
-                className="text-2xl font-bold hover:text-gray-300 transition-colors"
+                className="text-2xl font-bold transition-colors"
               >
-                Work3
+                <div className="flex items-center">
+            <Zap className="h-8 w-8 text-[var(--bg-color)]" />
+            <span className="ml-2 text-xl font-bold">ChainWork</span>
+          </div>
             </Link>
             </div>
+            <div className="hidden md:flex items-center space-x-8">
 
             {/* Navigation Links */}
             {auth.account && (
@@ -54,7 +60,7 @@ function Navbar() {
                     key={link.to}
                     to={link.to}
                     className="inline-flex items-center px-1 pt-1 text-sm
-                             border-b-2 border-transparent hover:border-white
+                             border-b-2 border-transparent text-[var(--text-color)] hover:text-[var(--text-color-hover)]
                              transition-colors duration-200"
                   >
                     {link.text}
@@ -67,17 +73,18 @@ function Navbar() {
             <div className="flex items-center space-x-4">
               {auth.account && (
                 <span 
-                  className="hidden sm:inline-block px-4 py-2 text-sm bg-gray-800 rounded-full cursor-pointer"
+                  className="hidden sm:inline-block px-4 py-2 text-sm bg-[var(--border-color)] rounded-full cursor-pointer"
                   onClick={() => setIsModalOpen(true)}
                 >
                   {auth.account.slice(0, 6)}...{auth.account.slice(-4)}
               </span>
               )}
-              <div className="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center
-                            font-bold text-sm hover:bg-gray-200 transition-colors cursor-pointer">
+              <div className="w-10 h-10 bg-[var(--bg-color)] text-[var()] rounded-full flex items-center justify-center
+                            font-bold text-sm hover:bg-[var(--bg-deep-color)] transition-colors cursor-pointer">
                 W3
               </div>
             </div>
+          </div>
           </div>
 
           {/* Mobile menu */}
@@ -91,7 +98,6 @@ function Navbar() {
                     className="px-3 py-2 text-sm hover:bg-gray-800
                              transition-colors duration-200"
                   >
-                    {link.text}
                   </Link>
                 ))}
               </div>

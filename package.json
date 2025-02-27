@@ -3,6 +3,7 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "ethers": "^6.13.5",
+    "lucide-react": "^0.476.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",

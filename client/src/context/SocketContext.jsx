@@ -10,7 +10,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (auth?.account) {
-      const newSocket = io('http://localhost:3000');
+      const newSocket = io('https://work3-y5ld.onrender.com');
       
       // When connected, send user's address
       newSocket.on('connect', () => {

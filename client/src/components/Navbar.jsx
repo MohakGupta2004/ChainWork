@@ -1,8 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
-import LogoutModal from './LogoutModal';
 import { Zap } from 'lucide-react';
+import ProfileModal from './ProfileModal';
+
 
 function Navbar() {
   const { auth } = useAuth();
@@ -106,7 +107,7 @@ function Navbar() {
     </nav>
 
       {/* Logout Modal */}
-      <LogoutModal 
+      <ProfileModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         onLogout={handleLogout} 

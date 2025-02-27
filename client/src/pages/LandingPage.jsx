@@ -1,15 +1,13 @@
 
 import NavbarLandingPage  from '../components/NavbarLandingPage';
 import Hero from '../components/Hero';
-// import Features from '../components/Features';
+import Features from '../components/Features';
 import { HowItWorks } from '../components/HowItWorks';
 import { Testimonials } from '../components/Testimonials';
 import { CTA } from '../components/CTA';
 import { Footer } from '../components/Footer';
 
 function App() {
-  
-
 
   return (
     <>
@@ -24,7 +22,8 @@ function App() {
       <div className="content-layer">
         <NavbarLandingPage />
         <Hero />
-        {/* <Features /> */}
+        <Features />
+
         <HowItWorks />
         <Testimonials />
         <CTA />

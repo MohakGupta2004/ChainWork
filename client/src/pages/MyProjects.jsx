@@ -35,7 +35,7 @@ export default function MyProjects() {
     }
 
     const web3 = new Web3(window.ethereum);
-    const contractAddress = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"; // Update with your contract address
+    const contractAddress = "0x9e2696928aF90D25452a368a58C2A272c28E6D25"; // Update with your contract address
     const contract = new web3.eth.Contract(PaymentABI, contractAddress);
 
     // Convert the amount from ETH to Wei

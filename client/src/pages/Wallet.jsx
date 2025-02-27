@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ABI from "../../../FreelanceDapp.json";
 import { useState, useEffect } from "react";
 import { useAuth } from '../context/AuthContext';
+import { Footer } from "../components/Footer";
 
 function Wallet() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ function Wallet() {
           method: "eth_requestAccounts"
         });
 
-        const contractAddress = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
+        const contractAddress = "0x525E2C99c304bA6d795fc871b95a6EF3058A6235";
         const contract = new web3.eth.Contract(ABI, contractAddress);
 
         updateAuth({
@@ -105,10 +106,11 @@ function Wallet() {
             className="w-full py-3 px-6 rounded-lg border hover:border-2
                      transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
-            Connect with MetaMask
+            Connect with Metamask
           </button>
         )}
       </div>
+      <Footer/>
     </div>
   );
 }

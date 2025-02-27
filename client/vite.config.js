@@ -6,4 +6,7 @@ import envCompatible from 'vite-plugin-env-compatible'
 export default defineConfig({
   envPrefix: "REACT_APP_",
   plugins: [react(), tailwindcss()],
+  server: {
+    host: '0.0.0.0'
+  },
 })

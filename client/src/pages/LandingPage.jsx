@@ -1,3 +1,4 @@
+
 import NavbarLandingPage  from '../components/NavbarLandingPage';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
@@ -7,6 +8,7 @@ import { CTA } from '../components/CTA';
 import { Footer } from '../components/Footer';
 
 function App() {
+
   return (
     <>
       {/* Fixed Background */}
@@ -21,6 +23,7 @@ function App() {
         <NavbarLandingPage />
         <Hero />
         <Features />
+
         <HowItWorks />
         <Testimonials />
         <CTA />

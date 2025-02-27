@@ -12,8 +12,9 @@ import Messages from "./pages/Messages";
 import Navbar from './components/Navbar';
 import ClientProjectDetails from './pages/ClientProjectDetails';
 import { SocketProvider } from './context/SocketContext';
+import { Footer } from './components/Footer';
+import LandingPage from './pages/LandingPage'
 import DepositFund from './pages/DepositFund';
-
 // Layout component that includes Navbar
 const Layout = () => {
   return (
@@ -22,6 +23,7 @@ const Layout = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Outlet />
       </main>
+      <Footer/>
     </div>
   );
 };
@@ -56,8 +58,12 @@ function AppRouter() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Wallet />,
+      element: <LandingPage />,
     },
+    // {
+    //   path: "/land",
+    //   element: <LandingPage/>,
+    // },
     {
       path: "/client",
       element: <ProtectedRouteComponent allowedUserType="client" />,

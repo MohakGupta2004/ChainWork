@@ -7,8 +7,10 @@ import {
     ArrowUpRight,
   } from 'lucide-react';
   import { motion } from 'framer-motion';
+
   import AnimatedSection from './AnimetedSection';
   import AnimatedCard from './AnimetedCard';
+
   
   export default function Features() {
     return (

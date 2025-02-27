@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+:root{
+  --bg-color: #f97316;
+  --bg-deep-color: #ea580c;
+  --text-color: #d1d5db;
+  --text-color-hover: #ffffff;
+  --border-color: #1f2937;
+}
+.darkmod{
+  --bg-color: #616161;
+  --bg-deep-color: #363535;
+  --text-color: #051b3d;
+  --border-color: #5393ec;
+}
 
 /* Global styles */
 html, body {
@@ -12,16 +25,6 @@ html, body {
 /* Ensure the main app container takes full height */
 #root {
   height: 100%;
-}
-
-/* Optional: Style for links */
-a {
-  color: #bb86fc; /* Light purple color for links */
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  color: #3700b3; /* Darker purple on hover */
 }
 
 /* Modal background */

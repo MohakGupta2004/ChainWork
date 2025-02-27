@@ -18,6 +18,7 @@ import LandingPage from './pages/LandingPage';
 const Layout = () => {
   return (
     <div>
+      
       <Navbar />
       <main className="">
         <Outlet />
@@ -59,10 +60,6 @@ function AppRouter() {
       path: "/",
       element: <LandingPage />,
     },
-    // {
-    //   path: "/land",
-    //   element: <LandingPage/>,
-    // },
     {
       path: "/client",
       element: <ProtectedRouteComponent allowedUserType="client" />,

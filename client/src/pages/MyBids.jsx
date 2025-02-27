@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api'; // Import the Axios instance
+import Loader from '../components/Loader'; // Import the Loader component
 import { useAuth } from '../context/AuthContext'; // Import the Auth context
 
 export default function MyBids() {
@@ -26,7 +27,12 @@ export default function MyBids() {
     fetchBids();
   }, [auth.account]);
 
-  if (loading) return <p>Loading bids...</p>;
+  if (loading) {
+    return (
+    <div className="bg-black min-h-screen flex items-center justify-center">
+      <Loader />
+    </div>
+  )};
   if (error) return <p>Error fetching bids: {error}</p>;
 
   return (

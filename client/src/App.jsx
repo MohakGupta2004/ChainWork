@@ -13,6 +13,7 @@ import Navbar from './components/Navbar';
 import ClientProjectDetails from './pages/ClientProjectDetails';
 import { SocketProvider } from './context/SocketContext';
 import { Footer } from './components/Footer';
+import LandingPage from './pages/LandingPage'
 
 // Layout component that includes Navbar
 const Layout = () => {
@@ -58,6 +59,10 @@ function AppRouter() {
     {
       path: "/",
       element: <Wallet />,
+    },
+    {
+      path: "/land",
+      element: <LandingPage/>,
     },
     {
       path: "/client",

@@ -107,7 +107,7 @@ export default function Hero() {
             >
               <motion.button
                 onClick={() => handleUserTypeSelect('freelancer')}
-                className="bg-orange-500 text-white px-8 py-4 rounded-lg hover:bg-orange-600 transition text-lg"
+                className="cursor-pointer bg-orange-500 text-white px-8 py-4 rounded-lg hover:bg-orange-600 transition text-lg"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -115,7 +115,7 @@ export default function Hero() {
               </motion.button>
               <motion.button
                 onClick={() => handleUserTypeSelect('client')}
-                className="border border-orange-500 text-orange-500 px-8 py-4 rounded-lg hover:bg-orange-500/10 transition text-lg"
+                className="border cursor-pointer border-orange-500 text-orange-500 px-8 py-4 rounded-lg hover:bg-orange-500/10 transition text-lg"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

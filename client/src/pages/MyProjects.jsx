@@ -27,9 +27,9 @@ export default function MyProjects() {
   if (loading) return <p>Loading projects...</p>;
   if (error) return <p>Error fetching projects: {error}</p>;
 
-  const handlePay = async (projectId) => {
+  const handlePay = async () => {
     // Implement payment logic here
-    alert(`Payment functionality for project ID ${projectId} to be implemented.`);
+    
   };
 
   return (

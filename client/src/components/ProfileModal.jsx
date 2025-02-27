@@ -1,6 +1,7 @@
 import React from 'react';
-
-const LogoutModal = ({ isOpen, onClose, onLogout }) => {
+import { Link } from 'react-router-dom';
+import DepositFund from '../pages/DepositFund';
+const ProfileModal = ({ isOpen, onClose, onLogout }) => {
   if (!isOpen) return null;
 
   return (
@@ -9,6 +10,9 @@ const LogoutModal = ({ isOpen, onClose, onLogout }) => {
         <h2 className="text-lg font-bold mb-4 text-white">Logout</h2>
         <p className="text-gray-300">Are you sure you want to log out?</p>
         <div className="mt-4 flex justify-end">
+          <Link to={'/depositefund'}>
+          <button>Deposite Funds</button>
+          </Link>
           <button 
             className="mr-2 px-4 py-2 bg-gray-600 rounded hover:bg-gray-500 transition-colors"
             onClick={onClose}
@@ -27,4 +31,4 @@ const LogoutModal = ({ isOpen, onClose, onLogout }) => {
   );
 };
 
-export default LogoutModal; 
+export default ProfileModal; 

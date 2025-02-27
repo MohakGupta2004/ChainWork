@@ -24,7 +24,7 @@ function Wallet() {
           method: "eth_requestAccounts"
         });
 
-        const contractAddress = "0xcd57DB7FC9AA65C44daD666f14e83D58B1bc313A";
+        const contractAddress = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
         const contract = new web3.eth.Contract(ABI, contractAddress);
 
         updateAuth({

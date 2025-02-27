@@ -12,6 +12,7 @@ import Messages from "./pages/Messages";
 import Navbar from './components/Navbar';
 import ClientProjectDetails from './pages/ClientProjectDetails';
 import { SocketProvider } from './context/SocketContext';
+import DepositFund from './pages/DepositFund';
 
 // Layout component that includes Navbar
 const Layout = () => {
@@ -94,6 +95,10 @@ function AppRouter() {
     {
       path: "/my-bids",
       element: <MyBids />,
+    },
+    {
+      path: "/depositefund",
+      element: <DepositFund/>
     },
     {
       path: "*",

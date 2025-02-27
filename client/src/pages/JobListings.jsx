@@ -7,6 +7,13 @@ export default function JobListings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const truncateText = (text, limit) => {
+    if (text.length > limit) {
+      return text.substring(0, limit) + '...';
+    }
+    return text;
+  };
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -50,7 +57,7 @@ export default function JobListings() {
 
       {/* Container for listings */}
       <div className="max-w-5xl mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
             <div
               key={index}
@@ -60,7 +67,7 @@ export default function JobListings() {
                 {project.title}
               </h2>
               <p className="text-sm text-gray-400 mb-6">
-                {project.description}
+                {truncateText(project.description, 100)}
               </p>
               <div className="mb-4">
                 <span className="text-gray-400 font-medium">Budget: </span>
@@ -77,7 +84,7 @@ export default function JobListings() {
                 </Link>
                 <Link
                   to={`/project/${index + 1}`}
-                  className="bg-orange-400 text-black px-4 py-2 rounded-md text-center hover:bg-orange-600 transition-colors"
+                  className="bg-orange-400 text-black px-4 py-2 rounded-md text-center hover:bg-orange-500 transition-colors"
                 >
                   Bid
                 </Link>

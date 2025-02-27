@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ABI from "../../../FreelanceDapp.json";
 import { useState, useEffect } from "react";
 import { useAuth } from '../context/AuthContext';
+import { Footer } from "../components/Footer";
 
 function Wallet() {
   const navigate = useNavigate();
@@ -105,10 +106,11 @@ function Wallet() {
             className="w-full py-3 px-6 rounded-lg border hover:border-2
                      transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
-            Connect with MetaMask
+            Connect with Metamask
           </button>
         )}
       </div>
+      <Footer/>
     </div>
   );
 }

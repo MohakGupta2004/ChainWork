@@ -12,6 +12,7 @@ import Messages from "./pages/Messages";
 import Navbar from './components/Navbar';
 import ClientProjectDetails from './pages/ClientProjectDetails';
 import { SocketProvider } from './context/SocketContext';
+import { Footer } from './components/Footer';
 
 // Layout component that includes Navbar
 const Layout = () => {
@@ -21,6 +22,7 @@ const Layout = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Outlet />
       </main>
+      {/* <Footer/> */}
     </div>
   );
 };

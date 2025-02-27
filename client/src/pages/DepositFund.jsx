@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Web3 from "web3"; // Import Web3 for Ethereum interaction
 import PaymentABI from '../../../PaymentABI.json' // Import the contract ABI
 

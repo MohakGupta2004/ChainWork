@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
-import DepositFund from '../pages/DepositFund';
 import Web3 from "web3"; // Import Web3 for Ethereum interaction
 import PaymentABI from '../../../PaymentABI.json'; // Import the contract ABI
 
@@ -34,17 +33,18 @@ const ProfileModal = ({ isOpen, onClose, onLogout }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-gray-800 rounded-lg p-6 shadow-lg transform transition-transform duration-300 scale-100">
-        <h2 className="text-lg font-bold mb-4 text-white">Profile</h2>
-        <p className="text-gray-300"></p>
-        <div className="mt-4 flex justify-end">
-          <Link to={'/depositefund'}>
-            <button>Deposit Funds</button>
+    <div className="fixed inset-0 flex items-center justify-center bg-black/60 bg-opacity-50">
+      <div className="bg-gray-800 bg-opacity-10 backdrop-blur-md rounded-lg p-6 shadow-lg transform transition-transform duration-300 scale-100">
+        <h2 className="text-lg font-bold mb-4 text-orange-500">Profile</h2>
+        <p className="text-gray-400 mt-4">Your Balance: {userBalance} ETH</p>
+        <div className="mt-4 flex justify-end space-x-4">
+          <Link to={'/deposit-fund'}>
+            <button className="px-4 py-2 bg-orange-500 text-black rounded hover:bg-orange-600 transition-colors">
+              Deposit Funds
+            </button>
           </Link>
-          
           <button 
-            className="mr-2 px-4 py-2 bg-gray-600 rounded hover:bg-gray-500 transition-colors"
+            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition-colors"
             onClick={onClose}
           >
             Cancel
@@ -56,10 +56,9 @@ const ProfileModal = ({ isOpen, onClose, onLogout }) => {
             Logout
           </button>
         </div>
-        <p className="text-gray-300 mt-4">Your Balance: {userBalance} ETH</p>
       </div>
     </div>
   );
 };
 
-export default ProfileModal; 
+export default ProfileModal;

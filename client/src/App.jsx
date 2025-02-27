@@ -103,7 +103,7 @@ function AppRouter() {
       element: <MyBids />,
     },
     {
-      path: "/depositefund",
+      path: "/deposit-fund",
       element: <DepositFund/>
     },
     {

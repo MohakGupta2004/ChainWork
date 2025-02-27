@@ -50,7 +50,13 @@ export default function MyProjects() {
       alert("Payment release failed!");
     }
   };
-  
+
+  const truncateText = (text, limit) => {
+    if (text.length > limit) {
+      return text.substring(0, limit) + '...';
+    }
+    return text;
+  };
 
   if (loading) {
     return (
@@ -59,26 +65,31 @@ export default function MyProjects() {
     </div>
   )};
   if (error) return <p>Error fetching projects: {error}</p>;
-
+  
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">My Projects</h1>
-      <div className="grid gap-4">
+    <div className="p-4 my-4">
+      <h1 className="text-2xl font-bold mb-4 text-orange-500">My Projects</h1>
+      <div className={`mx-auto grid gap-4 ${projects.length === 0 ? "text-center" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}>
         {projects.length === 0 ? (
-          <p>No projects found.</p>
+          <p className="text-white">No projects found.</p>
         ) : (
           projects.map((project, index) => (
-            <div key={index} className="bg-gray-800 rounded shadow p-4 mb-4">
+            <div key={index} className="bg-gray-800/30 backdrop-blur-sm rounded-3xl p-8 h-full border border-gray-700/50 hover:bg-gray-800/40 transition-all duration-300">
               <h2 className="text-xl font-semibold text-white">{project.title}</h2>
-              <p className="mb-2 text-white"><strong>Description:</strong> {project.description}</p>
-              <p className="mb-2 text-white"><strong>Budget:</strong> {parseFloat(project.budget) / 1e18} ETH</p>
-              <p className={`font-bold ${project.completed ? "text-green-500" : "text-red-500"}`}>
+              <p className="text-md text-gray-400 mb-6">{truncateText(project.description, 100)}</p>
+              <p className="text-md text-gray-400 mb-6">
+                <span className="text-gray-400 font-medium">Budget: </span>
+                <span className="text-white font-semibold">
+                  {parseFloat(project.budget) / 1e18} ETH
+                </span>
+              </p>
+              <p className={`font-bold my-2 py-2 ${project.completed ? "text-green-500" : "text-red-500"}`}>
                 {project.completed ? "Completed" : "In Progress"}
               </p>
               {project.completed && (
                 <button
                   onClick={() => handlePay(index, project.acceptedFreelancer, parseFloat(project.budget) / 1e18)} // Pass the project ID and budget
-                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mt-2"
+                  className="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 mt-2"
                 >
                   Pay
                 </button>

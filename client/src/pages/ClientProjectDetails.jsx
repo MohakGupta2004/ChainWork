@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api'; // Import the Axios instance
+import Loader from '../components/Loader'; // Import the Loader component
+import Navbar from '../components/Navbar'; // Import the Navbar component
 import { useAuth } from '../context/AuthContext'; // Import the Auth context
 
 export default function ClientProjectDetails() {
@@ -36,7 +38,12 @@ export default function ClientProjectDetails() {
     fetchBids(); // Fetch bids when the component mounts
   }, [id]);
 
-  if (loading) return <p>Loading project details...</p>;
+  if (loading) {
+    return (
+    <div className="bg-black min-h-screen flex items-center justify-center">
+      <Loader />
+    </div>
+  )};
   if (error) return <p>Error fetching project details: {error}</p>;
 
   const handleAcceptBid = async (bidIndex) => {
@@ -76,53 +83,68 @@ export default function ClientProjectDetails() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Project Details</h1>
-      {project && (
-        <div className="bg-gray-800 rounded shadow p-4 mb-4">
-          <h2 className="text-xl font-semibold text-white">{project.title}</h2>
-          <p className="mb-2 text-white"><strong>Description:</strong> {project.description}</p>
-          <p className="mb-2 text-white"><strong>Budget:</strong> {parseFloat(project.budget) / 1e18} ETH</p>
-          <p className={`font-bold ${project.completed ? "text-green-500" : "text-red-500"}`}>
-            {project.completed ? "Completed" : "In Progress"}
-          </p>
-          {project.completed && (
-            <button
-              onClick={handlePay}
-              className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mt-2"
-            >
-              Pay
-            </button>
+    <div>
+      <Navbar />
+      <div className="p-4 flex">
+        <div className="w-1/2 p-4">
+          <h1 className="text-2xl font-bold mb-4">Project Details</h1>
+          {project && (
+            <div className="bg-gray-800 rounded shadow p-4 mb-4 border border-gray-600 hover:shadow-lg transition-shadow duration-300">
+              <h2 className="text-xl font-semibold text-white">{project.title}</h2>
+              <p className="text-md text-gray-400 mb-6 py-6 px-4 justify-evenly text-justify">{project.description}</p>
+              <div className="flex justify-between items-center mb-6 px-4">
+                <span className="text-gray-400 font-medium">Budget: </span>
+                <span className="text-white font-semibold">
+                  {parseFloat(project.budget) / 1e18} ETH
+                </span>
+              </div>
+              <div className="flex justify-between items-center px-4">
+                <span className="text-gray-400 font-medium">Status: </span>
+                <span className={`font-bold ${project.completed ? "text-green-500" : "text-red-500"}`}>
+                  {project.completed ? "Completed" : "In Progress"}
+                </span>
+              </div>
+              {project.completed && (
+                <button
+                  onClick={handlePay}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mt-2"
+                >
+                  Pay
+                </button>
+              )}
+            </div>
           )}
         </div>
-      )}
 
-      <h2 className="text-xl font-bold mb-2">Bids from Freelancers</h2>
-      <div className="bg-gray-700 rounded shadow p-4 mb-4">
-        {bids.length === 0 ? (
-          <p className="text-white">No bids placed yet.</p>
-        ) : (
-          <ul>
-            {bids.map((bid, index) => (
-              <li key={index} className="border-b py-2 text-white">
-                <span className="font-semibold">{bid.freelancer}</span>: {parseFloat(bid.amount) / 1e18} ETH - 
-                <span className={bid.accepted ? "text-green-500" : "text-red-500"}>
-                  {bid.accepted ? "Accepted" : "Pending"}
-                </span>
-                <p className="text-gray-400">Comment: {bid.comment}</p>
-                {!bid.accepted && ( // Only show the button if the bid is not accepted
-                  <button
-                    onClick={() => handleAcceptBid(index)} // Pass the index of the bid
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2"
-                  >
-                    Accept Bid
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className="w-1/2 p-4 mt-2">
+          <h2 className="text-xl font-bold mb-4">Bids from Freelancers</h2>
+          <div className="bg-gray-800 rounded shadow p-4 mb-4 border border-gray-600 hover:shadow-lg transition-shadow duration-300">
+            {bids.length === 0 ? (
+              <p className="text-white">No bids placed yet.</p>
+            ) : (
+              <ul>
+                {bids.map((bid, index) => (
+                  <li key={index} className="border-b py-2 text-white">
+                    <span className="font-semibold">{bid.freelancer}</span>: {parseFloat(bid.amount) / 1e18} ETH - 
+                    <span className={bid.accepted ? "text-green-500" : "text-red-500"}>
+                      {bid.accepted ? "Accepted" : "Pending"}
+                    </span>
+                    <p className="text-gray-400">Comment: {bid.comment}</p>
+                    {!bid.accepted && ( // Only show the button if the bid is not accepted
+                      <button
+                        onClick={() => handleAcceptBid(index)} // Pass the index of the bid
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2"
+                      >
+                        Accept Bid
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
-} 
+}

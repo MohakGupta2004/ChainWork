@@ -36,7 +36,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="border-b border-[var(--border-color)]">
+      <nav className="border-b border-[var(--border-color)] bg-black z-10">
         <div className="w-full">
           <div className="flex justify-between h-16 items-center px-4">
             {/* Logo */}

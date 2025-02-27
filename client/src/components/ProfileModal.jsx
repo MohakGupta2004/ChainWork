@@ -36,8 +36,8 @@ const ProfileModal = ({ isOpen, onClose, onLogout }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-gray-800 rounded-lg p-6 shadow-lg transform transition-transform duration-300 scale-100">
-        <h2 className="text-lg font-bold mb-4 text-white">Logout</h2>
-        <p className="text-gray-300">Are you sure you want to log out?</p>
+        <h2 className="text-lg font-bold mb-4 text-white">Profile</h2>
+        <p className="text-gray-300"></p>
         <div className="mt-4 flex justify-end">
           <Link to={'/depositefund'}>
             <button>Deposit Funds</button>

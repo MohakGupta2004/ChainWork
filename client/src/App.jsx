@@ -13,7 +13,7 @@ import Navbar from './components/Navbar';
 import ClientProjectDetails from './pages/ClientProjectDetails';
 import { SocketProvider } from './context/SocketContext';
 import { Footer } from './components/Footer';
-
+import DepositFund from './pages/DepositFund'
 // Layout component that includes Navbar
 const Layout = () => {
   return (

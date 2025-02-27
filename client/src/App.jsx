@@ -21,7 +21,17 @@ const Layout = () => {
       
       <Navbar />
       <main className="">
-        <Outlet />
+        {/* Fixed Background */}
+        <div className="grid-pattern" />
+        <div className="background-orbs">
+          <div className="background-orb background-orb-1" />
+          <div className="background-orb background-orb-2" />
+        </div>
+
+        {/* Content */}
+        <div className="content-layer">
+          <Outlet />
+        </div>
       </main>
       <Footer/>
     </div>

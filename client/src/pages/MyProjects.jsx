@@ -11,6 +11,7 @@ export default function MyProjects() {
   const [projects, setProjects] = useState([]); // State to hold projects
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [payment, setPayment] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -47,6 +48,7 @@ export default function MyProjects() {
         .releasePayment(freelancerAddress, amountInWei)
         .send({ from: accounts[0] });
       alert("Payment released successfully!");
+      setPayment(true);
     } catch (error) {
       console.error("Error releasing payment:", error);
       alert("Payment release failed!");
@@ -111,6 +113,7 @@ export default function MyProjects() {
               <div className="flex flex-col gap-2 mt-auto">
                 {project.completed && (
                   <button
+                    disabled={payment}
                     onClick={() =>
                       handlePay(
                         index,
@@ -118,9 +121,10 @@ export default function MyProjects() {
                         parseFloat(project.budget) / 1e18
                       )
                     } // Pass the project ID and budget
-                    className="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 mt-2"
+                    className={` text-black px-4 py-2 rounded hover:bg-yellow-600 mt-2 ${
+                      payment ? " bg-gray-800 cursor-not-allowed" : "bg-yellow-500 hover:bg-yellow-600 cursor-pointer"}`}
                   >
-                    Pay
+                    {payment ? "Payment Released" : "Release Payment"}
                   </button>
                 )}
                 <div className="flex items-center justify-center gap-4">

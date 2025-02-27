@@ -1,4 +1,3 @@
-import React, { memo } from "react";
 import { Zap, Github, Twitter, Linkedin } from "lucide-react";
 
 export function Footer() {

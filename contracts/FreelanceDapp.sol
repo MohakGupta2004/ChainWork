@@ -115,12 +115,21 @@ contract FreelanceDapp {
     }
 
     function acceptBid(uint256 _projectId, uint256 _bidIndex) external onlyClient(_projectId) {
-        require(_bidIndex < projectBids[_projectId].length, "Invalid bid index");
-        require(projects[_projectId].acceptedFreelancer == address(0), "A bid has already been accepted");
-        projectBids[_projectId][_bidIndex].accepted = true;
-        projects[_projectId].acceptedFreelancer = projectBids[_projectId][_bidIndex].freelancer;
-        emit BidAccepted(_projectId, projectBids[_projectId][_bidIndex].freelancer);
-    }
+    require(_bidIndex < projectBids[_projectId].length, "Invalid bid index");
+    require(projects[_projectId].acceptedFreelancer == address(0), "A bid has already been accepted");
+
+    // Mark the bid as accepted.
+    projectBids[_projectId][_bidIndex].accepted = true;
+    
+    // Update the project's accepted freelancer.
+    projects[_projectId].acceptedFreelancer = projectBids[_projectId][_bidIndex].freelancer;
+    
+    // Update the project's budget to the accepted bid's amount.
+    projects[_projectId].budget = projectBids[_projectId][_bidIndex].amount;
+
+    emit BidAccepted(_projectId, projectBids[_projectId][_bidIndex].freelancer);
+}
+
 
     function markProjectCompleted(uint256 _projectId) external onlyAcceptedFreelancer(_projectId) {
     require(!projects[_projectId].completed, "Project already completed");

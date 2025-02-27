@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import api from '../api'; // Import the Axios instance
 import { useAuth } from '../context/AuthContext'; // Import the Auth context
 import { Link } from 'react-router-dom';
+import Web3 from "web3"; // Import Web3 for Ethereum interaction
+import PaymentABI from '../../../PaymentABI.json'; // Import the contract ABI
 
 export default function MyProjects() {
   const { auth } = useAuth(); // Get the user's account
@@ -24,13 +26,33 @@ export default function MyProjects() {
     fetchProjects(); // Fetch projects when the component mounts
   }, [auth.account]);
 
+  const handlePay = async (projectId, freelancerAddress, amountInEth) => {
+    console.log(projectId, freelancerAddress, amountInEth);
+    if (!window.ethereum) {
+      alert("Please install MetaMask!");
+      return;
+    }
+  
+    const web3 = new Web3(window.ethereum);
+    const contractAddress = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"; // Update with your contract address
+    const contract = new web3.eth.Contract(PaymentABI, contractAddress);
+  
+    // Convert the amount from ETH to Wei
+    const amountInWei = web3.utils.toWei(amountInEth.toString(), "ether");
+  
+    try {
+      const accounts = await web3.eth.requestAccounts();
+      await contract.methods.releasePayment(freelancerAddress, amountInWei).send({ from: accounts[0] });
+      alert("Payment released successfully!");
+    } catch (error) {
+      console.error("Error releasing payment:", error);
+      alert("Payment release failed!");
+    }
+  };
+  
+
   if (loading) return <p>Loading projects...</p>;
   if (error) return <p>Error fetching projects: {error}</p>;
-
-  const handlePay = async (projectId) => {
-    // Implement payment logic here
-    alert(`Payment functionality for project ID ${projectId} to be implemented.`);
-  };
 
   return (
     <div className="p-4">
@@ -49,7 +71,7 @@ export default function MyProjects() {
               </p>
               {project.completed && (
                 <button
-                  onClick={() => handlePay(project.id)} // Pass the project ID
+                  onClick={() => handlePay(index, project.acceptedFreelancer, parseFloat(project.budget) / 1e18)} // Pass the project ID and budget
                   className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mt-2"
                 >
                   Pay

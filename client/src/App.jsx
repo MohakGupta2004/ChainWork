@@ -103,6 +103,10 @@ function AppRouter() {
       element: <MyBids />,
     },
     {
+      path: "/depositefund",
+      element: <DepositFund/>
+    },
+    {
       path: "*",
       element: <ErrorPage />
     }

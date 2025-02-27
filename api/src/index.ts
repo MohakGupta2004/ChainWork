@@ -13,7 +13,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5174",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -21,7 +21,7 @@ const io = new Server(httpServer, {
 
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({ origin: "http://localhost:5174", credentials: true }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use("/api/v1", appRouter);
 app.use(express.json());
 

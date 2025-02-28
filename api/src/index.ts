@@ -13,7 +13,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:5173","https://work3-two.vercel.app"],
+    origin: ["http://localhost:5173","https://work3-two.vercel.app", "https://chainworkweb3.vercel.app"],
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -21,7 +21,7 @@ const io = new Server(httpServer, {
 
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({ origin: ["http://localhost:5173","https://work3-two.vercel.app"], credentials: true }));
+app.use(cors({ origin: ["http://localhost:5173","https://work3-two.vercel.app", "https://chainworkweb3.vercel.app"], credentials: true }));
 app.use("/api/v1", appRouter);
 app.use(express.json());
 

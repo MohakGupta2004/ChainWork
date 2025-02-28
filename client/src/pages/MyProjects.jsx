@@ -5,13 +5,18 @@ import { Link } from "react-router-dom";
 import Web3 from "web3"; // Import Web3 for Ethereum interaction
 import PaymentABI from "../../../PaymentABI.json"; // Import the contract ABI
 import Loader from "../components/Loader";
+import { use } from "react";
 
 export default function MyProjects() {
   const { auth } = useAuth(); // Get the user's account
   const [projects, setProjects] = useState([]); // State to hold projects
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [payment, setPayment] = useState(false);
+  const [payment, setPayment] = useState(localStorage.getItem("payment") || false);
+
+  useEffect(() => {
+    localStorage.setItem("payment", payment);
+  }, [payment]);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -121,7 +126,7 @@ export default function MyProjects() {
                         parseFloat(project.budget) / 1e18
                       )
                     } // Pass the project ID and budget
-                    className={` text-black px-4 py-2 rounded hover:bg-yellow-600 mt-2 ${
+                    className={` text-black px-4 py-2 rounded mt-2 ${
                       payment ? " bg-gray-800 cursor-not-allowed" : "bg-yellow-500 hover:bg-yellow-600 cursor-pointer"}`}
                   >
                     {payment ? "Payment Released" : "Release Payment"}

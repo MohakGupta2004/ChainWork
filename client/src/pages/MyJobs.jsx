@@ -28,8 +28,9 @@ export default function MyJobs() {
   }, [auth.account]);
 
   const handleMarkAsComplete = async (projectId) => {
+    console.log(projectId)
     try {
-      const tx = await auth.contract.methods.markProjectCompleted(projectId).send({ from: auth.account });
+      const tx = await auth.contract.methods.markProjectCompleted(5).send({ from: auth.account });
       alert("Project marked as completed!");
       console.log(tx);
 

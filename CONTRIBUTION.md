@@ -15,7 +15,12 @@ Thank you for your interest in contributing to ChainWork! We welcome contributio
     ```
 4. Install dependencies:
     ```
+    ```
+    ```
+    cd client
     npm install
+    ```
+    ```
     ```
 5. Create a new branch for your contribution:
     ```

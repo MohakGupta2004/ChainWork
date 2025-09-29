@@ -38,8 +38,8 @@ The Freelance DApp is a decentralized application built on the Ethereum blockcha
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/MohakGupta2004/Work3.git
-cd Work3 
+git clone https://github.com/MohakGupta2004/ChainWork.git
+cd ChainWork 
 ```
 
 ### Install Dependencies
@@ -47,6 +47,7 @@ cd Work3
 Navigate to the project directory and install the required dependencies:
 
 ```bash
+cd client
 npm install
 ```
 
